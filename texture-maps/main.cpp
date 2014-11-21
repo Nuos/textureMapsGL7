@@ -137,35 +137,33 @@ void initTriangle(void)
         1.0f,0.0f,
     };
     
-    //1，生成指定的VBO信息
-    //顶点信息
+    //生成VBO
     glGenBuffers(3, vbo);
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
     
-    //颜色信息
     glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
     
-    //UV信息
     glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
     glBufferData(GL_ARRAY_BUFFER, sizeof(uv_data), uv_data, GL_STATIC_DRAW);
     
-    //2，生成VAO，并绑定VBO信息
+    //生成VAO
     glGenVertexArrays(1,&vao);
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-    glVertexAttribPointer(ATTRIB_POSITION_LOCATION,3,GL_FLOAT,GL_FALSE,0,0);
     
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-    glVertexAttribPointer(ATTRIB_COLOR_LOCATION,3,GL_FLOAT,GL_FALSE,0,0);
-    
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
-    glVertexAttribPointer(ATTRIB_UV_LOCATION,2,GL_FLOAT,GL_FALSE,0,0);
-    
-    glEnableVertexAttribArray(ATTRIB_POSITION_LOCATION);
-    glEnableVertexAttribArray(ATTRIB_COLOR_LOCATION);
-    glEnableVertexAttribArray(ATTRIB_UV_LOCATION);
+        glBindVertexArray(vao);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+        glVertexAttribPointer(ATTRIB_POSITION_LOCATION,3,GL_FLOAT,GL_FALSE,0,0);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+        glVertexAttribPointer(ATTRIB_COLOR_LOCATION,3,GL_FLOAT,GL_FALSE,0,0);
+        
+        glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+        glVertexAttribPointer(ATTRIB_UV_LOCATION,2,GL_FLOAT,GL_FALSE,0,0);
+        
+        glEnableVertexAttribArray(ATTRIB_POSITION_LOCATION);
+        glEnableVertexAttribArray(ATTRIB_COLOR_LOCATION);
+        glEnableVertexAttribArray(ATTRIB_UV_LOCATION);
     
     glBindVertexArray(0);
 }
@@ -173,24 +171,20 @@ void initTriangle(void)
 //设置并使用着色器
 void initShader(void)
 {
-    shaderLoader.load("/Users/wistoneqqx/Documents/opengl/opengl-study-records/texture-maps-gl7/texture-maps/simpleShader.vert",
-                      "/Users/wistoneqqx/Documents/opengl/opengl-study-records/texture-maps-gl7/texture-maps/simpleShader.frag");
+    shaderLoader.load("/Users/wistoneqqx/Documents/opengl/github/texture-maps-gl7/texture-maps/simpleShader.vert",
+                      "/Users/wistoneqqx/Documents/opengl/github/texture-maps-gl7/texture-maps/simpleShader.frag");
     shaderLoader.bind();
     
-    //定义两张纹理的配置
+    //定义两张纹理的采样器
     glGenSamplers(1,&g_Sampler1);
     glGenSamplers(1,&g_Sampler2);
     
-    glSamplerParameteri(g_Sampler1, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glSamplerParameteri(g_Sampler1, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glSamplerParameteri(g_Sampler1, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glSamplerParameteri(g_Sampler1, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glSamplerParameteri(g_Sampler2, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    
     glSamplerParameteri(g_Sampler2, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glSamplerParameteri(g_Sampler2, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glSamplerParameteri(g_Sampler2, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     
-    //获取片断着色器中u_texture1和u_texture2指针
     textureLocation1 = glGetUniformLocation(shaderLoader.getProgramID(), "u_texture1");
     textureLocation2 = glGetUniformLocation(shaderLoader.getProgramID(), "u_texture2");
     
@@ -201,7 +195,6 @@ void initShader(void)
 //画三角形
 void drawTriangle(void)
 {
-    //绑定两张纹理，并将数据发送给GPU
     glActiveTexture(GL_TEXTURE0);
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, g_texture1);
@@ -245,10 +238,10 @@ int main(void)
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
     
-    if(false==LoadImg("/Users/wistoneqqx/Documents/opengl/opengl-study-records/texture-maps-gl7/texture-maps/test01.jpg",0))
+    if(false==LoadImg("/Users/wistoneqqx/Documents/opengl/github/texture-maps-gl7/texture-maps/test01.jpg",0))
         printf("加载图片1失败！\n");
     
-    if(false==LoadImg("/Users/wistoneqqx/Documents/opengl/opengl-study-records/texture-maps-gl7/texture-maps/test02.jpg",1))
+    if(false==LoadImg("/Users/wistoneqqx/Documents/opengl/github/texture-maps-gl7/texture-maps/test02.jpg",1))
         printf("加载图片2失败！\n");
     
     initShader();
